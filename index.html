@@ -464,7 +464,7 @@ footer span { color: var(--gold3); }
 // ╔══════════════════════════════════════════════════════╗
 //  CONFIGURACIÓN — reemplaza con tu URL de Web App
 // ╚══════════════════════════════════════════════════════╝
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzWrGH_3eUoGe7m4JGZnyHWf8W8hDwg2m_6mf__8i8z3JyMdtnUTWLvxECtsl_Ou8jNsQ/exec";
+const GAS_URL = "TU_URL_DE_WEB_APP_AQUI";
 
 // ── Contador demo ──────────────────────────────────────
 let demoCounter = 1;
@@ -540,7 +540,7 @@ async function submitForm() {
   showStatus("Guardando…", "ok");
 
   // ── MODO DEMO ──────────────────────────────────────────
-  if (!GAS_URL || GAS_URL === "https://script.google.com/macros/s/AKfycbz70bUpjRdBoPlbVdjcl2nB0xXiwSie__qD-mckleg-LxvFFaN-rYe9m7bgh0hLoRgP6A/exec") {
+  if (!GAS_URL || GAS_URL === "TU_URL_DE_WEB_APP_AQUI") {
     await new Promise(r => setTimeout(r, 700));
     const fakeOC = "OC-" + String(demoCounter++).padStart(5,"0");
     document.getElementById("nroCompra").value = fakeOC;
@@ -569,7 +569,7 @@ async function loadInventario() {
   const tbody = document.getElementById("inventarioBody");
   tbody.innerHTML = '<tr><td colspan="11" class="empty-state">Cargando…</td></tr>';
 
-  if (!GAS_URL || GAS_URL === "if (!GAS_URL || GAS_URL === "https://script.google.com/macros/s/AKfycbz70bUpjRdBoPlbVdjcl2nB0xXiwSie__qD-mckleg-LxvFFaN-rYe9m7bgh0hLoRgP6A/exec")") {
+  if (!GAS_URL || GAS_URL === "TU_URL_DE_WEB_APP_AQUI") {
     const demo = [
       { nroCompra:"OC-00001", fechaIngresoAuto:"02/05/2026 09:15:00", idProducto:"PRD-001", nombre:"Vidrio templado 6mm",    descripcion:"120x80 cm, bordes pulidos", cantidad:10, bodega:"Krystal",    costoUnit:85000, fechaIngreso:"01/05/2026", fechaUltSalida:"" },
       { nroCompra:"OC-00002", fechaIngresoAuto:"02/05/2026 11:30:00", idProducto:"PRD-002", nombre:"Perfil aluminio 3m",     descripcion:"Serie 6063 T5, anodizado",  cantidad:25, bodega:"Carrera 30", costoUnit:42000, fechaIngreso:"01/05/2026", fechaUltSalida:"02/05/2026" },

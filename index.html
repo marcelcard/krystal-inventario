@@ -540,7 +540,7 @@ async function submitForm() {
   showStatus("Guardando…", "ok");
 
   // ── MODO DEMO ──────────────────────────────────────────
-  if (!GAS_URL || GAS_URL === "TU_URL_DE_WEB_APP_AQUI") {
+  if (!GAS_URL || GAS_URL === "https://script.google.com/macros/s/AKfycbz70bUpjRdBoPlbVdjcl2nB0xXiwSie__qD-mckleg-LxvFFaN-rYe9m7bgh0hLoRgP6A/exec") {
     await new Promise(r => setTimeout(r, 700));
     const fakeOC = "OC-" + String(demoCounter++).padStart(5,"0");
     document.getElementById("nroCompra").value = fakeOC;

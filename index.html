@@ -464,8 +464,7 @@ footer span { color: var(--gold3); }
 // ╔══════════════════════════════════════════════════════╗
 //  CONFIGURACIÓN — reemplaza con tu URL de Web App
 // ╚══════════════════════════════════════════════════════╝
-const GAS_URL = "https://script.google.com/macros/s/AKfycbznkqB7eUXcSiz9046nzp7790_ptASshFZteMefEI8TuUjoKWWlNdI8_K5P4RKBSXbFtA/exec
-";
+const GAS_URL = "TU_URL_DE_WEB_APP_AQUI";
 
 // ── Contador demo ──────────────────────────────────────
 let demoCounter = 1;
@@ -510,61 +509,59 @@ function resetForm() {
 }
 
 // ── SUBMIT ─────────────────────────────────────────────
-function submitForm() {
+async function submitForm() {
   const get = id => document.getElementById(id).value.trim();
-
   const required = ["idProducto","nombre","cantidad","bodega","costoUnit","fechaIngreso"];
-  const labels = {
-    idProducto: "ID Producto",
-    nombre: "Nombre",
-    cantidad: "Cantidad",
-    bodega: "Bodega",
-    costoUnit: "Costo",
-    fechaIngreso: "Fecha"
+  const labels   = {
+    idProducto   : "ID Producto",
+    nombre       : "Nombre del Producto",
+    cantidad     : "Cantidad",
+    bodega       : "Bodega",
+    costoUnit    : "Costo Unitario",
+    fechaIngreso : "Fecha de Ingreso",
   };
-
   const missing = required.filter(id => !get(id));
-
   if (missing.length) {
-    showStatus("⚠ Faltan: " + missing.map(id => labels[id]).join(", "), "err");
+    showStatus("⚠ Campos obligatorios: " + missing.map(id => labels[id]).join(", "), "err");
     return;
   }
 
-  showStatus("Enviando...", "ok");
-
-  const iframe = document.createElement("iframe");
-  iframe.style.display = "none";
-  document.body.appendChild(iframe);
-
-  const form = document.createElement("form");
-  form.method = "POST";
-  form.action = GAS_URL;
-  form.target = iframe.name = "hidden_iframe_" + Date.now();
-
-  const fields = {
-    idProducto: get("idProducto"),
-    nombre: get("nombre"),
-    cantidad: get("cantidad"),
-    bodega: get("bodega"),
-    costoUnit: get("costoUnit"),
-    fechaIngreso: get("fechaIngreso")
+  const payload = {
+    idProducto  : get("idProducto"),
+    nombre      : get("nombre"),
+    descripcion : get("descripcion"),
+    cantidad    : Number(get("cantidad")),
+    bodega      : get("bodega"),
+    costoUnit   : Number(get("costoUnit")),
+    fechaIngreso: get("fechaIngreso"),
+    // fechaUltSalida: se deja vacía; el script la llena automáticamente al registrarse
   };
 
-  for (let key in fields) {
-    const input = document.createElement("input");
-    input.type = "hidden";
-    input.name = key;
-    input.value = fields[key];
-    form.appendChild(input);
+  showStatus("Guardando…", "ok");
+
+  // ── MODO DEMO ──────────────────────────────────────────
+  if (!GAS_URL || GAS_URL === "TU_URL_DE_WEB_APP_AQUI") {
+    await new Promise(r => setTimeout(r, 700));
+    const fakeOC = "OC-" + String(demoCounter++).padStart(5,"0");
+    document.getElementById("nroCompra").value = fakeOC;
+    showStatus("✔ Registrado: " + fakeOC + "  (modo demo — configura GAS_URL)", "ok");
+    return;
   }
 
-  document.body.appendChild(form);
-  form.submit();
-
-  showStatus("✔ Guardado en Google Sheets", "ok");
-  resetForm();
-
-  setTimeout(() => iframe.remove(), 3000);
+  // ── ENVÍO REAL ─────────────────────────────────────────
+  try {
+    const res  = await fetch(GAS_URL, { method:"POST", body: JSON.stringify(payload) });
+    const json = await res.json();
+    if (json.ok) {
+      document.getElementById("nroCompra").value = json.nroCompra;
+      showStatus("✔ Guardado: " + json.nroCompra, "ok");
+      resetForm();
+    } else {
+      showStatus("Error: " + json.error, "err");
+    }
+  } catch(e) {
+    showStatus("Error de red: " + e.message, "err");
+  }
 }
 
 // ── LOAD INVENTARIO ────────────────────────────────────
@@ -572,7 +569,7 @@ async function loadInventario() {
   const tbody = document.getElementById("inventarioBody");
   tbody.innerHTML = '<tr><td colspan="11" class="empty-state">Cargando…</td></tr>';
 
-  if (!GAS_URL || GAS_URL.includes("TU_URL")) {
+  if (!GAS_URL || GAS_URL === "TU_URL_DE_WEB_APP_AQUI") {
     const demo = [
       { nroCompra:"OC-00001", fechaIngresoAuto:"02/05/2026 09:15:00", idProducto:"PRD-001", nombre:"Vidrio templado 6mm",    descripcion:"120x80 cm, bordes pulidos", cantidad:10, bodega:"Krystal",    costoUnit:85000, fechaIngreso:"01/05/2026", fechaUltSalida:"" },
       { nroCompra:"OC-00002", fechaIngresoAuto:"02/05/2026 11:30:00", idProducto:"PRD-002", nombre:"Perfil aluminio 3m",     descripcion:"Serie 6063 T5, anodizado",  cantidad:25, bodega:"Carrera 30", costoUnit:42000, fechaIngreso:"01/05/2026", fechaUltSalida:"02/05/2026" },

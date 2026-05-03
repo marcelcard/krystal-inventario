@@ -12,9 +12,7 @@
             --gold: #e0c97f; --teal: #2dd4bf; 
             --white: #f0eff6; --gray: #8888aa;
         }
-
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        
         body {
             background: var(--navy);
             color: var(--white);
@@ -23,7 +21,6 @@
             flex-direction: column;
             min-height: 100vh;
         }
-
         header {
             background: #16213e;
             border-bottom: 1px solid var(--gold);
@@ -33,13 +30,10 @@
             gap: 1.2rem;
             box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
-
         .kr-logo-svg { width: 42px; height: auto; }
         .brand h1 { font-family: 'Barlow Condensed'; font-size: 1.3rem; text-transform: uppercase; margin: 0; letter-spacing: 1px; }
         .brand p { font-size: .6rem; color: var(--gold); text-transform: uppercase; margin: 0; }
-
         main { max-width: 800px; margin: 3rem auto; padding: 0 1.5rem; width: 100%; }
-
         .card {
             background: var(--navy2);
             border: 1px solid rgba(224,201,127,.15);
@@ -47,44 +41,32 @@
             padding: 2.5rem;
             box-shadow: 0 10px 40px rgba(0,0,0,.6);
         }
-
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
         }
-
         .field { display: flex; flex-direction: column; gap: .6rem; }
         label { font-size: .7rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.5px; }
-
         input, select {
             background: rgba(255,255,255,.05);
             border: 1px solid rgba(224,201,127,.2);
             border-radius: 8px; padding: .85rem;
             color: var(--white); outline: none;
-            transition: border-color 0.3s;
         }
-
         input:focus { border-color: var(--gold); }
-
         .btn-submit {
             background: var(--gold);
             color: var(--navy);
             padding: 1.1rem; border: none; border-radius: 8px;
             font-weight: 700; cursor: pointer;
             text-transform: uppercase; width: 100%; margin-top: 2rem;
-            font-size: 0.9rem; transition: transform 0.2s;
         }
-
-        .btn-submit:active { transform: scale(0.98); }
-
         #statusMsg {
             margin-top: 1.5rem; padding: 1rem;
             border-radius: 8px; display: none; text-align: center; font-weight: 600;
         }
-
         .ok { background: rgba(45,212,191,0.1); color: var(--teal); border: 1px solid var(--teal); }
-
         iframe { display: none; }
     </style>
 </head>
@@ -105,37 +87,21 @@
 
     <main>
         <div class="card">
-            <!-- REEMPLAZA ESTA URL CON TU URL DE GOOGLE APPS SCRIPT -->
-            <form id="formInventario" action="https://script.google.com/macros/s/AKfycbxusVBQq9FjAMKrzabtrmjx7uSvyLJXtG3ZiTf7lCUExOvtgs73AzxbxPP91ltTg3wI/exec">
+            <!-- La URL se asigna automáticamente mediante el script de abajo -->
+            <form id="formInventario" action="" method="POST" target="puenteInvisible" onsubmit="iniciarEnvio()">
                 <div class="form-grid">
-                    <div class="field">
-                        <label>ID Producto</label>
-                        <input type="text" name="idProducto" required placeholder="Ej: PRD-001">
-                    </div>
-                    <div class="field">
-                        <label>Descripción</label>
-                        <input type="text" name="nombre" required placeholder="Detalle del producto">
-                    </div>
-                    <div class="field">
-                        <label>Cantidad</label>
-                        <input type="number" name="cantidad" value="1" min="1">
-                    </div>
-                    <div class="field">
-                        <label>Bodega</label>
+                    <div class="field"><label>ID Producto</label><input type="text" name="idProducto" required></div>
+                    <div class="field"><label>Descripción</label><input type="text" name="nombre" required></div>
+                    <div class="field"><label>Cantidad</label><input type="number" name="cantidad" value="1" min="1"></div>
+                    <div class="field"><label>Bodega</label>
                         <select name="bodega">
                             <option value="Krystal">Krystal</option>
                             <option value="Carrera 30">Carrera 30</option>
                             <option value="Teusaquillo">Teusaquillo</option>
                         </select>
                     </div>
-                    <div class="field">
-                        <label>Costo Unitario</label>
-                        <input type="number" name="costoUnit" value="0">
-                    </div>
-                    <div class="field">
-                        <label>Fecha Factura</label>
-                        <input type="date" name="fechaIngreso" id="fechaAuto">
-                    </div>
+                    <div class="field"><label>Costo Unitario</label><input type="number" name="costoUnit" value="0"></div>
+                    <div class="field"><label>Fecha Factura</label><input type="date" name="fechaIngreso" id="fechaAuto"></div>
                 </div>
                 <button type="submit" class="btn-submit">Sincronizar Registro</button>
             </form>
@@ -143,37 +109,40 @@
         </div>
     </main>
 
-    <!-- IFRAME Puente: Crucial para evitar errores de CORS -->
-    <iframe name="puenteInvisible" id="puenteInvisible" onload="if(typeof estadoEnvio !== 'undefined' && estadoEnvio){ finalizarEnvio(); }"></iframe>
+    <!-- El "Ancla" que evita que la página cambie a la respuesta JSON -->
+    <iframe name="puenteInvisible" id="puenteInvisible" onload="controlarRespuesta()"></iframe>
 
     <script>
-        // Variable de control global
-        let estadoEnvio = false;
+        // --- PEGA TU URL DE GOOGLE AQUÍ ---
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRZB7tswXbF6Dj_ZCAsWLQ-sUmTqSBsgZpU1WM3lWQH3lleeSkXhpmLKChe_212P7J/exec";
+        
+        let enviando = false;
 
-        // Establecer fecha de hoy automáticamente
-        document.getElementById('fechaAuto').value = new Date().toISOString().split('T')[0];
+        // Configuración inicial
+        window.onload = function() {
+            document.getElementById('formInventario').action = SCRIPT_URL;
+            document.getElementById('fechaAuto').value = new Date().toISOString().split('T')[0];
+        };
 
         function iniciarEnvio() {
-            estadoEnvio = true; // Activa la escucha del iframe
+            enviando = true;
             const msg = document.getElementById("statusMsg");
-            msg.textContent = "⏳ Enviando datos a Google Sheets...";
+            msg.textContent = "⏳ Guardando en la base de datos...";
             msg.className = "ok";
             msg.style.display = "block";
         }
 
-        function finalizarEnvio() {
-            estadoEnvio = false; // Desactiva la escucha para evitar bucles
-            const msg = document.getElementById("statusMsg");
-            msg.textContent = "✔ ¡Registro guardado exitosamente!";
-            
-            // Limpia el formulario
-            document.getElementById('formInventario').reset();
-            document.getElementById('fechaAuto').value = new Date().toISOString().split('T')[0];
-            
-            // Ocultar mensaje después de 4 segundos
-            setTimeout(() => {
-                msg.style.display = "none";
-            }, 4000);
+        function controlarRespuesta() {
+            // Solo actúa si nosotros disparamos el envío
+            if (enviando) {
+                enviando = false;
+                const msg = document.getElementById("statusMsg");
+                msg.textContent = "✔ ¡Registro guardado con éxito!";
+                document.getElementById('formInventario').reset();
+                document.getElementById('fechaAuto').value = new Date().toISOString().split('T')[0];
+                
+                setTimeout(() => { msg.style.display = "none"; }, 5000);
+            }
         }
     </script>
 </body>

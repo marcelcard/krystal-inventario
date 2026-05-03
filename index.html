@@ -8,8 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Raleway:wght@300;400;600&family=Barlow+Condensed:wght@700&display=swap" rel="stylesheet"/>
     <style>
         :root {
-            --navy: #0f0f1e; --navy2: #1a1a2e; --gold: #e0c97f; 
-            --teal: #2dd4bf; --white: #f0eff6; --gray: #8888aa;
+            --navy: #0f0f1e; --navy2: #1a1a2e; --navy3: #16213e;
+            --gold: #e0c97f; --gold2: #c9a84c; --teal: #2dd4bf; 
+            --white: #f0eff6; --gray: #8888aa; --red: #f87171;
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -19,32 +20,23 @@
             color: var(--white);
             font-family: 'Raleway', sans-serif;
             min-height: 100vh;
+            background-image: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(224,201,127,.08) 0%, transparent 60%);
         }
 
         header {
-            background: #16213e;
-            border-bottom: 1px solid var(--gold);
-            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--navy2) 0%, #0d1b3e 100%);
+            border-bottom: 1px solid rgba(224,201,127,.25);
+            padding: 0 2rem;
             display: flex;
             align-items: center;
-            gap: 1.5rem;
+            height: 90px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
 
+        .logo-wrap { display: flex; align-items: center; gap: 1rem; }
         .kr-logo-svg { width: 45px; height: auto; }
-        
-        .brand h1 {
-            font-family: 'Barlow Condensed', sans-serif;
-            font-size: 1.4rem; font-weight: 700;
-            color: var(--white); text-transform: uppercase;
-            line-height: 1;
-        }
-
-        .brand p {
-            font-size: .65rem; color: var(--gold);
-            letter-spacing: .15em; text-transform: uppercase;
-            margin-top: 2px;
-        }
+        .brand h1 { font-family: 'Barlow Condensed'; font-size: 1.4rem; text-transform: uppercase; line-height: 1; }
+        .brand p { font-size: .65rem; color: var(--gold); letter-spacing: .15em; text-transform: uppercase; }
 
         main { max-width: 1000px; margin: 2rem auto; padding: 0 1.5rem; }
 
@@ -54,6 +46,7 @@
             border-radius: 10px;
             padding: 2rem;
             box-shadow: 0 8px 32px rgba(0,0,0,.5);
+            margin-bottom: 2rem;
         }
 
         .form-grid {
@@ -63,13 +56,9 @@
         }
 
         .field { display: flex; flex-direction: column; gap: .5rem; }
-        
-        label {
-            font-size: .75rem; font-weight: 600;
-            color: var(--gray); text-transform: uppercase;
-        }
+        label { font-size: .75rem; font-weight: 600; color: var(--gray); text-transform: uppercase; }
 
-        input, select, textarea {
+        input, select {
             background: rgba(255,255,255,.05);
             border: 1px solid rgba(224,201,127,.2);
             border-radius: 7px; padding: .8rem;
@@ -77,26 +66,23 @@
             font-family: 'Raleway', sans-serif;
         }
 
-        input:focus { border-color: var(--gold); }
-
         .btn-primary {
             background: var(--gold);
             color: var(--navy);
             padding: 1rem; border: none; border-radius: 7px;
             font-weight: 700; cursor: pointer;
-            text-transform: uppercase; letter-spacing: 0.1em;
-            width: 100%; margin-top: 1.5rem;
+            text-transform: uppercase; width: 100%; margin-top: 1.5rem;
         }
 
         #statusMsg {
             margin-top: 1.5rem; padding: 1rem;
-            border-radius: 7px; display: none; text-align: center;
-            font-weight: 600; font-size: 0.9rem;
+            border-radius: 7px; display: none; text-align: center; font-weight: 600;
         }
 
         .ok { background: rgba(45,212,191,0.1); color: var(--teal); border: 1px solid var(--teal); }
+        .err { background: rgba(248,113,113,0.1); color: var(--red); border: 1px solid var(--red); }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
+        table { width: 100%; border-collapse: collapse; }
         th { text-align: left; color: var(--gold); padding: 1rem; border-bottom: 2px solid var(--gold); font-size: .75rem; }
         td { padding: 1rem; border-bottom: 1px solid rgba(224,201,127,0.1); font-size: .85rem; }
 
@@ -106,69 +92,50 @@
 <body>
 
     <header>
-        <svg class="kr-logo-svg" viewBox="0 0 60 70" fill="none">
-            <rect x="8" y="10" width="10" height="50" fill="white"/>
-            <rect x="22" y="25" width="10" height="35" fill="white"/>
-            <rect x="36" y="15" width="10" height="45" fill="white"/>
-            <rect x="8" y="8" width="38" height="5" fill="#FFE600"/>
-        </svg>
-        <div class="brand">
-            <h1>Krystal Soluciones</h1>
-            <p>Módulo de Inventario</p>
+        <div class="logo-wrap">
+            <svg class="kr-logo-svg" viewBox="0 0 60 70" fill="none">
+                <rect x="8" y="10" width="10" height="50" fill="white"/>
+                <rect x="22" y="25" width="10" height="35" fill="white"/>
+                <rect x="36" y="15" width="10" height="45" fill="white"/>
+                <rect x="8" y="8" width="38" height="5" fill="#FFE600"/>
+            </svg>
+            <div class="brand">
+                <h1>Krystal Soluciones</h1>
+                <p>Módulo de Inventario</p>
+            </div>
         </div>
     </header>
 
     <main>
+        <!-- SECCIÓN DE REGISTRO -->
         <div class="card">
-            <!-- REEMPLAZA ESTA URL CON TU URL DE GOOGLE APPS SCRIPT -->
-            <form id="miFormulario" action="https://script.google.com/macros/s/AKfycbwRZB7tswXbF6Dj_ZCAsWLQ-sUmTqSBsgZpU1WM3lWQH3lleeSkXhpmLKChe_212P7J/exec" method="POST" target="miIframe" onsubmit="iniciarEnvio()">
+            <form id="formInventario" action="https://script.google.com/macros/s/AKfycbwRZB7tswXbF6Dj_ZCAsWLQ-sUmTqSBsgZpU1WM3lWQH3lleeSkXhpmLKChe_212P7J/exec" method="POST" target="iframeRegistro" onsubmit="iniciarProceso()">
                 <div class="form-grid">
-                    <div class="field">
-                        <label>ID Producto</label>
-                        <input type="text" name="idProducto" required placeholder="PRD-001">
-                    </div>
-                    <div class="field">
-                        <label>Nombre</label>
-                        <input type="text" name="nombre" required placeholder="Vidrio Templado">
-                    </div>
-                    <div class="field">
-                        <label>Cantidad</label>
-                        <input type="number" name="cantidad" value="1" min="1">
-                    </div>
-                    <div class="field">
-                        <label>Bodega</label>
+                    <div class="field"><label>ID Producto</label><input type="text" name="idProducto" required></div>
+                    <div class="field"><label>Nombre</label><input type="text" name="nombre" required></div>
+                    <div class="field"><label>Cantidad</label><input type="number" name="cantidad" value="1"></div>
+                    <div class="field"><label>Bodega</label>
                         <select name="bodega">
                             <option value="Krystal">Krystal</option>
                             <option value="Carrera 30">Carrera 30</option>
                             <option value="Teusaquillo">Teusaquillo</option>
                         </select>
                     </div>
-                    <div class="field">
-                        <label>Costo Unitario</label>
-                        <input type="number" name="costoUnit" value="0">
-                    </div>
-                    <div class="field">
-                        <label>Fecha Factura</label>
-                        <input type="date" name="fechaIngreso" id="inputFecha">
-                    </div>
+                    <div class="field"><label>Costo Unitario</label><input type="number" name="costoUnit" value="0"></div>
+                    <div class="field"><label>Fecha Factura</label><input type="date" name="fechaIngreso" id="fechaHoy"></div>
                 </div>
-                <button type="submit" class="btn-primary">Registrar en Google Sheets</button>
+                <button type="submit" class="btn-primary">Registrar en Nube</button>
             </form>
             <div id="statusMsg"></div>
         </div>
 
-        <div class="card" style="margin-top: 2rem;">
-            <button onclick="cargarTabla()" class="btn-primary" style="background:none; border:1px solid var(--gold); color:var(--gold); margin-bottom:1.5rem; width:auto; padding: 0.5rem 1.5rem;">↻ Actualizar Inventario</button>
+        <!-- SECCIÓN DE TABLA -->
+        <div class="card">
+            <button onclick="cargarInventario()" class="btn-primary" style="background:none; border:1px solid var(--gold); color:var(--gold); margin-bottom:1.5rem; width:auto; padding: 0.5rem 1.5rem;">↻ Actualizar Inventario</button>
             <div style="overflow-x:auto;">
                 <table>
                     <thead>
-                        <tr>
-                            <th>OC</th>
-                            <th>ID</th>
-                            <th>Producto</th>
-                            <th>Cant.</th>
-                            <th>Bodega</th>
-                        </tr>
+                        <tr><th>OC</th><th>ID</th><th>Producto</th><th>Cant.</th><th>Bodega</th></tr>
                     </thead>
                     <tbody id="cuerpoTabla"></tbody>
                 </table>
@@ -176,40 +143,40 @@
         </div>
     </main>
 
-    <!-- EL IFRAME OCULTO QUE PROCESA EL ENVÍO -->
-    <iframe name="miIframe" id="miIframe" onload="if(procesando){ finalizarEnvio(); }"></iframe>
+    <!-- EL PUENTE PARA EVITAR CORS EN POST -->
+    <iframe name="iframeRegistro" id="iframeRegistro" onload="if(estadoEnvio){ finalizarProceso(); }"></iframe>
 
     <script>
-        const MI_URL = "https://script.google.com/macros/s/AKfycbwRZB7tswXbF6Dj_ZCAsWLQ-sUmTqSBsgZpU1WM3lWQH3lleeSkXhpmLKChe_212P7J/exec";
-        let procesando = false;
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRZB7tswXbF6Dj_ZCAsWLQ-sUmTqSBsgZpU1WM3lWQH3lleeSkXhpmLKChe_212P7J/exec";
+        let estadoEnvio = false;
 
-        // Fecha de hoy por defecto
-        document.getElementById('inputFecha').value = new Date().toISOString().split('T')[0];
+        document.getElementById('fechaHoy').value = new Date().toISOString().split('T')[0];
 
-        function iniciarEnvio() {
-            procesando = true;
-            const msg = document.getElementById("statusMsg");
-            msg.textContent = "⏳ Sincronizando con la nube...";
-            msg.className = "ok";
-            msg.style.display = "block";
+        function iniciarProceso() {
+            estadoEnvio = true;
+            const m = document.getElementById("statusMsg");
+            m.textContent = "⏳ Sincronizando con Google Sheets...";
+            m.className = "ok";
+            m.style.display = "block";
         }
 
-        function finalizarEnvio() {
-            procesando = false;
-            const msg = document.getElementById("statusMsg");
-            msg.textContent = "✔ ¡Datos guardados exitosamente!";
-            document.getElementById('miFormulario').reset();
-            document.getElementById('inputFecha').value = new Date().toISOString().split('T')[0];
-            cargarTabla(); // Refresca la tabla automáticamente
+        function finalizarProceso() {
+            estadoEnvio = false;
+            document.getElementById("statusMsg").textContent = "✔ Guardado exitosamente.";
+            document.getElementById('formInventario').reset();
+            document.getElementById('fechaHoy').value = new Date().toISOString().split('T')[0];
+            cargarInventario();
         }
 
-        async function cargarTabla() {
+        async function cargarInventario() {
             const tb = document.getElementById('cuerpoTabla');
-            tb.innerHTML = "<tr><td colspan='5' style='text-align:center;'>Cargando...</td></tr>";
+            tb.innerHTML = "<tr><td colspan='5' style='text-align:center;'>Conectando...</td></tr>";
             
             try {
-                const response = await fetch(MI_URL);
-                const data = await response.json();
+                // Petición fetch simple para evitar bloqueos CORS en GET
+                const res = await fetch(SCRIPT_URL);
+                if (!res.ok) throw new Error();
+                const data = await res.json();
                 
                 tb.innerHTML = data.map(x => `
                     <tr>
@@ -221,9 +188,12 @@
                     </tr>
                 `).join('');
             } catch (e) {
-                tb.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--red);'>Error al conectar con el servidor.</td></tr>";
+                tb.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--red);'>Error de conexión (CORS). Verifica la publicación del script.</td></tr>";
             }
         }
+        
+        // Carga inicial
+        window.onload = cargarInventario;
     </script>
 </body>
 </html>

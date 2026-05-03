@@ -1,643 +1,145 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Krystal · Módulo de Inventario</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krystal · Inventario Premium</title>
+
 <style>
-/* ── TOKENS ─────────────────────────────────────────────── */
-:root {
-  --navy:   #0f0f1e;
-  --navy2:  #1a1a2e;
-  --navy3:  #16213e;
-  --gold:   #e0c97f;
-  --gold2:  #c9a84c;
-  --gold3:  #f5e6b0;
-  --teal:   #2dd4bf;
-  --red:    #f87171;
-  --white:  #f0eff6;
-  --gray:   #8888aa;
-  --radius: 10px;
-  --shadow: 0 8px 32px rgba(0,0,0,.55);
+body{
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg,#0f0f1e,#1a1a2e);
+  color:white;
+  padding:20px;
 }
-
-/* ── RESET ──────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 15px; scroll-behavior: smooth; }
-body {
-  background: var(--navy);
-  color: var(--white);
-  font-family: 'Raleway', sans-serif;
-  min-height: 100vh;
-  background-image:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(224,201,127,.08) 0%, transparent 60%),
-    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(224,201,127,.03) 40px),
-    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(224,201,127,.03) 40px);
+.card{
+  background:#1a1a2e;
+  padding:20px;
+  border-radius:12px;
+  margin-bottom:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,.5);
 }
-
-/* ── HEADER ─────────────────────────────────────────────── */
-header {
-  background: linear-gradient(135deg, var(--navy2) 0%, #0d1b3e 100%);
-  border-bottom: 1px solid rgba(224,201,127,.25);
-  padding: 0 2.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  height: 72px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 4px 24px rgba(0,0,0,.6);
+input,select{
+  width:100%;
+  padding:10px;
+  margin:5px 0;
+  border-radius:6px;
+  border:1px solid #333;
+  background:#0f0f1e;
+  color:white;
 }
-.logo-wrap {
-  display: flex; align-items: center; gap: .9rem; flex-shrink: 0;
+button{
+  padding:10px 20px;
+  background:#e0c97f;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:bold;
 }
-.logo-mark {
-  width: 42px; height: 42px;
-  background: linear-gradient(135deg, var(--gold), var(--gold2));
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Cinzel', serif; font-size: 1.2rem; font-weight: 700;
-  color: var(--navy);
+table{
+  width:100%;
+  border-collapse:collapse;
 }
-.brand h1 {
-  font-family: 'Cinzel', serif;
-  font-size: 1.15rem; font-weight: 700;
-  color: var(--gold); letter-spacing: .1em;
-  line-height: 1.1;
+th,td{
+  padding:10px;
+  border-bottom:1px solid #333;
 }
-.brand p {
-  font-size: .65rem; color: var(--gray);
-  letter-spacing: .2em; text-transform: uppercase;
-}
-.header-divider {
-  width: 1px; height: 36px;
-  background: rgba(224,201,127,.2);
-}
-.header-sub {
-  font-size: .78rem; color: var(--gold3);
-  letter-spacing: .08em;
-  font-family: 'Raleway', sans-serif;
-}
-.header-badge {
-  margin-left: auto;
-  background: rgba(224,201,127,.1);
-  border: 1px solid rgba(224,201,127,.3);
-  border-radius: 20px;
-  padding: .25rem .9rem;
-  font-size: .72rem; color: var(--gold3);
-  letter-spacing: .1em;
-}
-.header-contact {
-  font-size: .72rem; color: var(--gray);
-  text-align: right; line-height: 1.7;
-}
-
-/* ── MAIN ───────────────────────────────────────────────── */
-main { max-width: 1300px; margin: 0 auto; padding: 2rem 2rem 4rem; }
-
-/* ── TABS ───────────────────────────────────────────────── */
-.tabs {
-  display: flex; gap: .5rem;
-  border-bottom: 1px solid rgba(224,201,127,.15);
-  margin-bottom: 2rem;
-}
-.tab-btn {
-  background: none; border: none;
-  padding: .75rem 1.5rem;
-  font-family: 'Raleway', sans-serif; font-size: .85rem;
-  font-weight: 600; color: var(--gray);
-  cursor: pointer; position: relative;
-  letter-spacing: .06em; text-transform: uppercase;
-  transition: color .2s;
-}
-.tab-btn.active { color: var(--gold); }
-.tab-btn.active::after {
-  content: '';
-  position: absolute; bottom: -1px; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--gold2), var(--gold));
-}
-.tab-btn:hover:not(.active) { color: var(--white); }
-.tab-panel { display: none; }
-.tab-panel.active { display: block; }
-
-/* ── CARD ───────────────────────────────────────────────── */
-.card {
-  background: var(--navy2);
-  border: 1px solid rgba(224,201,127,.15);
-  border-radius: var(--radius);
-  padding: 2rem 2.5rem;
-  box-shadow: var(--shadow);
-}
-.card-title {
-  font-family: 'Cinzel', serif;
-  font-size: 1rem; color: var(--gold);
-  letter-spacing: .1em; margin-bottom: 1.75rem;
-  display: flex; align-items: center; gap: .75rem;
-}
-.card-title::before {
-  content: '';
-  width: 3px; height: 1.1em;
-  background: linear-gradient(180deg, var(--gold), var(--gold2));
-  border-radius: 2px;
-}
-
-/* ── FORM GRID ───────────────────────────────────────────── */
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1.25rem 1.5rem;
-}
-.field { display: flex; flex-direction: column; gap: .45rem; }
-.field.full { grid-column: 1 / -1; }
-
-label {
-  font-size: .75rem; font-weight: 600;
-  color: var(--gray); letter-spacing: .1em; text-transform: uppercase;
-}
-label span.req { color: var(--gold); margin-left: .2rem; }
-.auto-tag {
-  font-size: .66rem; color: var(--teal);
-  background: rgba(45,212,191,.1);
-  border-radius: 4px; padding: .12rem .45rem;
-  margin-left: .4rem; letter-spacing: .04em;
-  font-weight: 500;
-}
-
-input, textarea, select {
-  background: rgba(255,255,255,.04);
-  border: 1px solid rgba(224,201,127,.2);
-  border-radius: 7px;
-  padding: .65rem .9rem;
-  color: var(--white);
-  font-family: 'Raleway', sans-serif; font-size: .88rem;
-  transition: border-color .2s, box-shadow .2s;
-  outline: none; width: 100%;
-}
-input:focus, textarea:focus, select:focus {
-  border-color: var(--gold2);
-  box-shadow: 0 0 0 3px rgba(224,201,127,.12);
-}
-input[readonly] {
-  color: var(--gold3);
-  font-family: 'Fira Code', monospace; font-size: .82rem;
-  cursor: default;
-  background: rgba(224,201,127,.05);
-}
-textarea { resize: vertical; min-height: 72px; }
-select option { background: var(--navy2); }
-
-/* ── ACTIONS ─────────────────────────────────────────────── */
-.form-actions {
-  display: flex; gap: 1rem; align-items: center;
-  margin-top: 2rem; padding-top: 1.5rem;
-  border-top: 1px solid rgba(224,201,127,.1);
-  flex-wrap: wrap;
-}
-.btn {
-  display: inline-flex; align-items: center; gap: .5rem;
-  padding: .7rem 1.75rem;
-  border: none; border-radius: 7px;
-  font-family: 'Raleway', sans-serif; font-size: .88rem; font-weight: 600;
-  cursor: pointer; transition: all .2s; letter-spacing: .04em;
-}
-.btn-primary {
-  background: linear-gradient(135deg, var(--gold2), var(--gold));
-  color: var(--navy);
-}
-.btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(224,201,127,.3); }
-.btn-secondary {
-  background: transparent;
-  border: 1px solid rgba(224,201,127,.3);
-  color: var(--gold3);
-}
-.btn-secondary:hover { border-color: var(--gold); background: rgba(224,201,127,.06); }
-
-/* ── STATUS ──────────────────────────────────────────────── */
-#statusMsg {
-  display: none;
-  padding: .75rem 1.25rem;
-  border-radius: 7px;
-  font-size: .85rem; font-weight: 500;
-  margin-left: auto;
-}
-#statusMsg.ok  { background: rgba(45,212,191,.15); color: var(--teal);  border: 1px solid rgba(45,212,191,.3); }
-#statusMsg.err { background: rgba(248,113,113,.12); color: var(--red);  border: 1px solid rgba(248,113,113,.3); }
-
-/* ── STATS ───────────────────────────────────────────────── */
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 1rem; margin-bottom: 1.75rem;
-}
-.stat-card {
-  background: var(--navy2);
-  border: 1px solid rgba(224,201,127,.12);
-  border-radius: var(--radius);
-  padding: 1.25rem 1.5rem;
-}
-.stat-card .label { font-size: .72rem; color: var(--gray); letter-spacing: .1em; text-transform: uppercase; }
-.stat-card .value { font-family: 'Fira Code', monospace; font-size: 1.6rem; color: var(--gold); margin-top: .3rem; }
-
-/* ── TABLE ───────────────────────────────────────────────── */
-.table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid rgba(224,201,127,.12); }
-table { width: 100%; border-collapse: collapse; font-size: .82rem; }
-thead tr { background: linear-gradient(90deg, var(--navy3), #0d1b3e); }
-thead th {
-  padding: .85rem 1rem;
-  text-align: left;
-  font-family: 'Cinzel', serif; font-size: .7rem;
-  color: var(--gold); letter-spacing: .1em;
-  border-bottom: 1px solid rgba(224,201,127,.2);
-  white-space: nowrap;
-}
-tbody tr { border-bottom: 1px solid rgba(224,201,127,.07); transition: background .15s; }
-tbody tr:last-child { border-bottom: none; }
-tbody tr:hover { background: rgba(224,201,127,.04); }
-tbody td { padding: .75rem 1rem; color: var(--white); white-space: nowrap; }
-tbody td.mono { font-family: 'Fira Code', monospace; font-size: .78rem; color: var(--gold3); }
-.badge-bodega {
-  display: inline-block; padding: .2rem .65rem;
-  border-radius: 20px; font-size: .7rem; font-weight: 600;
-  background: rgba(45,212,191,.12); color: var(--teal);
-  border: 1px solid rgba(45,212,191,.25);
-}
-.empty-state { padding: 3.5rem 1rem; text-align: center; color: var(--gray); font-size: .9rem; }
-
-/* ── FOOTER ──────────────────────────────────────────────── */
-footer {
-  text-align: center;
-  padding: 1.5rem;
-  font-size: .72rem;
-  color: var(--gray);
-  border-top: 1px solid rgba(224,201,127,.1);
-  letter-spacing: .08em;
-}
-footer span { color: var(--gold3); }
-
-/* ── RESPONSIVE ──────────────────────────────────────────── */
-@media (max-width: 640px) {
-  header { padding: 0 1rem; gap: .75rem; }
-  .header-contact { display: none; }
-  main { padding: 1rem 1rem 3rem; }
-  .card { padding: 1.25rem 1rem; }
-  .form-grid { grid-template-columns: 1fr; }
+th{
+  color:#e0c97f;
 }
 </style>
 </head>
+
 <body>
 
-<!-- ── HEADER ── -->
-<header>
-  <div class="logo-wrap">
-    <div class="logo-mark">K</div>
-    <div class="brand">
-      <h1>Krystal</h1>
-      <p>Soluciones · Vidrio · Acero · Aluminio</p>
-    </div>
-  </div>
-  <div class="header-divider"></div>
-  <span class="header-sub">Módulo de Inventario</span>
-  <div class="header-contact" style="margin-left:auto;">
-    <div>📱 313 267 47 07 · 313 212 76 92</div>
-    <div>📍 Calle 68 No. 27-06 (Esquina) · Bogotá</div>
-  </div>
-</header>
+<h1>KRYSTAL · Inventario Premium</h1>
 
-<main>
+<div class="card">
+<h3>Nuevo ingreso</h3>
 
-  <!-- TABS -->
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('ingreso', this)">Ingreso de Compra</button>
-    <button class="tab-btn"       onclick="switchTab('inventario', this)">Inventario</button>
-  </div>
+<input id="idProducto" placeholder="ID Producto">
+<input id="nombre" placeholder="Nombre">
+<input id="descripcion" placeholder="Descripción">
+<input id="cantidad" type="number" placeholder="Cantidad">
+<input id="bodega" placeholder="Bodega">
+<input id="costoUnit" type="number" placeholder="Costo">
+<input id="fechaIngreso" type="date">
 
-  <!-- ─────────── TAB: INGRESO ─────────── -->
-  <div id="tab-ingreso" class="tab-panel active">
-    <div class="card">
-      <div class="card-title">Registro de Nuevo Ingreso</div>
+<button onclick="guardar()">Guardar</button>
+<p id="msg"></p>
+</div>
 
-      <div class="form-grid">
+<div class="card">
+<h3>Inventario</h3>
+<button onclick="cargar()">Actualizar</button>
 
-        <!-- Nro Compra (auto) -->
-        <div class="field">
-          <label>Nro de Compra <span class="auto-tag">Auto</span></label>
-          <input type="text" id="nroCompra" readonly placeholder="OC-?????"/>
-        </div>
-
-        <!-- Fecha ingreso automática -->
-        <div class="field">
-          <label>Fecha de Ingreso <span class="auto-tag">Auto</span></label>
-          <input type="text" id="fechaIngresoAuto" readonly/>
-        </div>
-
-        <!-- ID Producto -->
-        <div class="field">
-          <label>ID Producto <span class="req">*</span></label>
-          <input type="text" id="idProducto" placeholder="Ej. PRD-0042"/>
-        </div>
-
-        <!-- Nombre -->
-        <div class="field">
-          <label>Nombre del Producto <span class="req">*</span></label>
-          <input type="text" id="nombre" placeholder="Nombre completo del producto"/>
-        </div>
-
-        <!-- Descripción -->
-        <div class="field full">
-          <label>Descripción</label>
-          <textarea id="descripcion" placeholder="Especificaciones, referencia, unidad de medida…"></textarea>
-        </div>
-
-        <!-- Cantidad -->
-        <div class="field">
-          <label>Cantidad <span class="req">*</span></label>
-          <input type="number" id="cantidad" min="0" step="any" placeholder="0"/>
-        </div>
-
-        <!-- Bodega -->
-        <div class="field">
-          <label>Bodega <span class="req">*</span></label>
-          <select id="bodega">
-            <option value="">— Seleccionar bodega —</option>
-            <option value="Krystal">Krystal</option>
-            <option value="Carrera 30">Carrera 30</option>
-            <option value="Teusaquillo">Teusaquillo</option>
-            <option value="Consignación">Consignación</option>
-          </select>
-        </div>
-
-        <!-- Costo Unitario -->
-        <div class="field">
-          <label>Costo Unitario (COP) <span class="req">*</span></label>
-          <input type="number" id="costoUnit" min="0" step="any" placeholder="0"/>
-        </div>
-
-        <!-- Fecha de Ingreso (manual – campo de compra) -->
-        <div class="field">
-          <label>Fecha de Ingreso al Sistema <span class="req">*</span></label>
-          <input type="date" id="fechaIngreso"/>
-        </div>
-
-        <!-- Nota informativa: Última salida -->
-        <div class="field">
-          <label>Fecha Última Salida</label>
-          <input type="text" readonly
-            value="Se registra automáticamente en Google Sheets"
-            style="font-size:.75rem; color:var(--teal); background:rgba(45,212,191,.05); border-color:rgba(45,212,191,.2);"/>
-        </div>
-
-      </div><!-- /form-grid -->
-
-      <div class="form-actions">
-        <button class="btn btn-secondary" onclick="resetForm()">✕ Limpiar</button>
-        <button class="btn btn-primary"   onclick="submitForm()">✔ Registrar Ingreso</button>
-        <div id="statusMsg"></div>
-      </div>
-
-    </div><!-- /card -->
-  </div><!-- /tab-ingreso -->
-
-  <!-- ─────────── TAB: INVENTARIO ─────────── -->
-  <div id="tab-inventario" class="tab-panel">
-
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="label">Registros Totales</div>
-        <div class="value" id="statTotal">—</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Órdenes de Compra</div>
-        <div class="value" id="statOC">—</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Valor Total Inventario</div>
-        <div class="value" id="statValor">—</div>
-      </div>
-      <div class="stat-card">
-        <div class="label">Bodegas Activas</div>
-        <div class="value" id="statBodegas">—</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title" style="justify-content:space-between;">
-        <span>Registros de Inventario</span>
-        <button class="btn btn-secondary" onclick="loadInventario()" style="font-size:.78rem;padding:.45rem 1rem;">↻ Actualizar</button>
-      </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Nro Compra</th>
-              <th>Fecha Ingreso (auto)</th>
-              <th>ID Producto</th>
-              <th>Nombre</th>
-              <th>Descripción</th>
-              <th>Cantidad</th>
-              <th>Bodega</th>
-              <th>Costo Unit</th>
-              <th>Valor Total</th>
-              <th>Fecha Ingreso</th>
-              <th>Últ. Salida</th>
-            </tr>
-          </thead>
-          <tbody id="inventarioBody">
-            <tr><td colspan="11" class="empty-state">Carga el inventario con el botón ↻ Actualizar</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div><!-- /tab-inventario -->
-
-</main>
-
-<footer>
-  <span>Krystal Soluciones</span> · Vidrio · Acero · Aluminio · Divisiones de Baño &nbsp;|&nbsp;
-  📍 Calle 68 No. 27-06 (Esquina), Bogotá &nbsp;|&nbsp;
-  krystaleros@gmail.com &nbsp;|&nbsp; @krystalsoluciones
-</footer>
+<table>
+<thead>
+<tr>
+<th>OC</th>
+<th>ID</th>
+<th>Nombre</th>
+<th>Cantidad</th>
+<th>Bodega</th>
+<th>Costo</th>
+</tr>
+</thead>
+<tbody id="tabla"></tbody>
+</table>
+</div>
 
 <script>
-// ╔══════════════════════════════════════════════════════╗
-//  CONFIGURACIÓN — reemplaza con tu URL de Web App
-// ╚══════════════════════════════════════════════════════╝
 const GAS_URL = "https://script.google.com/macros/s/AKfycbw2yA_RRt_4AqER4h3_T8jIAD4HZQTD0U80X-hSs3a5Iu5RvrrRorhqZ6_Vc3kanHXm/exec";
 
-// ── Contador demo ──────────────────────────────────────
-let demoCounter = 1;
+function val(id){ return document.getElementById(id).value; }
+function msg(t){ document.getElementById("msg").innerText=t; }
 
-// ── Init ───────────────────────────────────────────────
-document.addEventListener("DOMContentLoaded", () => {
-  refreshAutoFields();
-  setInterval(refreshAutoFields, 1000);
-  // Fecha de ingreso = hoy por defecto
-  document.getElementById("fechaIngreso").value = todayISO();
-});
+async function guardar(){
+  const data = {
+    idProducto: val("idProducto"),
+    nombre: val("nombre"),
+    descripcion: val("descripcion"),
+    cantidad: Number(val("cantidad")),
+    bodega: val("bodega"),
+    costoUnit: Number(val("costoUnit")),
+    fechaIngreso: val("fechaIngreso")
+  };
 
-function todayISO() {
-  return new Date().toISOString().split("T")[0];
-}
-
-function refreshAutoFields() {
-  const now = new Date();
-  const fecha = now.toLocaleDateString("es-CO", { day:"2-digit", month:"2-digit", year:"numeric" });
-  const hora  = now.toLocaleTimeString("es-CO");
-  document.getElementById("fechaIngresoAuto").value = `${fecha}  ${hora}`;
-}
-
-// ── TABS ───────────────────────────────────────────────
-function switchTab(name, btn) {
-  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
-  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-  document.getElementById("tab-" + name).classList.add("active");
-  btn.classList.add("active");
-  if (name === "inventario") loadInventario();
-}
-
-// ── RESET ──────────────────────────────────────────────
-function resetForm() {
-  ["idProducto","nombre","descripcion","cantidad","costoUnit"].forEach(id => {
-    document.getElementById(id).value = "";
+  const res = await fetch(GAS_URL,{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify(data)
   });
-  document.getElementById("bodega").value = "";
-  document.getElementById("fechaIngreso").value = todayISO();
-  document.getElementById("nroCompra").value = "";
-  hideStatus();
-}
 
-// ── SUBMIT ─────────────────────────────────────────────
-async function submitForm() {
-  const get = id => document.getElementById(id).value.trim();
-  const required = ["idProducto","nombre","cantidad","bodega","costoUnit","fechaIngreso"];
-  const labels   = {
-    idProducto   : "ID Producto",
-    nombre       : "Nombre del Producto",
-    cantidad     : "Cantidad",
-    bodega       : "Bodega",
-    costoUnit    : "Costo Unitario",
-    fechaIngreso : "Fecha de Ingreso",
-  };
-  const missing = required.filter(id => !get(id));
-  if (missing.length) {
-    showStatus("⚠ Campos obligatorios: " + missing.map(id => labels[id]).join(", "), "err");
-    return;
-  }
+  const json = await res.json();
 
-  const payload = {
-    idProducto  : get("idProducto"),
-    nombre      : get("nombre"),
-    descripcion : get("descripcion"),
-    cantidad    : Number(get("cantidad")),
-    bodega      : get("bodega"),
-    costoUnit   : Number(get("costoUnit")),
-    fechaIngreso: get("fechaIngreso"),
-    // fechaUltSalida: se deja vacía; el script la llena automáticamente al registrarse
-  };
-
-  showStatus("Guardando…", "ok");
-
-  // ── MODO DEMO ──────────────────────────────────────────
-  if (!GAS_URL || GAS_URL === "TU_URL_DE_WEB_APP_AQUI") {
-    await new Promise(r => setTimeout(r, 700));
-    const fakeOC = "OC-" + String(demoCounter++).padStart(5,"0");
-    document.getElementById("nroCompra").value = fakeOC;
-    showStatus("✔ Registrado: " + fakeOC + "  (modo demo — configura GAS_URL)", "ok");
-    return;
-  }
-
-  // ── ENVÍO REAL ─────────────────────────────────────────
-  try {
-    const res  = await fetch(GAS_URL, { method:"POST", body: JSON.stringify(payload) });
-    const json = await res.json();
-    if (json.ok) {
-      document.getElementById("nroCompra").value = json.nroCompra;
-      showStatus("✔ Guardado: " + json.nroCompra, "ok");
-      resetForm();
-    } else {
-      showStatus("Error: " + json.error, "err");
-    }
-  } catch(e) {
-    showStatus("Error de red: " + e.message, "err");
+  if(json.ok){
+    msg("Guardado: "+json.nroCompra);
+    cargar();
+  }else{
+    msg("Error");
   }
 }
 
-// ── LOAD INVENTARIO ────────────────────────────────────
-async function loadInventario() {
-  const tbody = document.getElementById("inventarioBody");
-  tbody.innerHTML = '<tr><td colspan="11" class="empty-state">Cargando…</td></tr>';
+async function cargar(){
+  const res = await fetch(GAS_URL);
+  const data = await res.json();
 
-  if (!GAS_URL || GAS_URL === "TU_URL_DE_WEB_APP_AQUI") {
-    const demo = [
-      { nroCompra:"OC-00001", fechaIngresoAuto:"02/05/2026 09:15:00", idProducto:"PRD-001", nombre:"Vidrio templado 6mm",    descripcion:"120x80 cm, bordes pulidos", cantidad:10, bodega:"Krystal",    costoUnit:85000, fechaIngreso:"01/05/2026", fechaUltSalida:"" },
-      { nroCompra:"OC-00002", fechaIngresoAuto:"02/05/2026 11:30:00", idProducto:"PRD-002", nombre:"Perfil aluminio 3m",     descripcion:"Serie 6063 T5, anodizado",  cantidad:25, bodega:"Carrera 30", costoUnit:42000, fechaIngreso:"01/05/2026", fechaUltSalida:"02/05/2026" },
-      { nroCompra:"OC-00003", fechaIngresoAuto:"02/05/2026 14:50:00", idProducto:"PRD-003", nombre:"División de baño 1.80m", descripcion:"Marco aluminio + vidrio 4mm",cantidad:4,  bodega:"Teusaquillo",costoUnit:320000,fechaIngreso:"30/04/2026", fechaUltSalida:"" },
-    ];
-    renderTable(demo);
-    updateStats(demo);
-    return;
-  }
+  const tabla = document.getElementById("tabla");
+  tabla.innerHTML="";
 
-  try {
-    const res  = await fetch(GAS_URL + "?action=getInventario");
-    const data = await res.json();
-    renderTable(data);
-    updateStats(data);
-  } catch(e) {
-    tbody.innerHTML = `<tr><td colspan="11" class="empty-state">Error al cargar: ${e.message}</td></tr>`;
-  }
-}
-
-function renderTable(rows) {
-  const tbody = document.getElementById("inventarioBody");
-  if (!rows.length) {
-    tbody.innerHTML = '<tr><td colspan="11" class="empty-state">Sin registros aún</td></tr>';
-    return;
-  }
-  tbody.innerHTML = rows.map(r => `
-    <tr>
-      <td class="mono">${r.nroCompra}</td>
-      <td style="font-size:.76rem;color:var(--gray)">${r.fechaIngresoAuto || r.fechaIngreso}</td>
-      <td class="mono">${r.idProducto}</td>
-      <td style="font-weight:600">${r.nombre}</td>
-      <td style="max-width:200px;white-space:normal;color:var(--gray);font-size:.77rem">${r.descripcion || "—"}</td>
-      <td style="text-align:right;font-weight:600;color:var(--gold3)">${fmtNum(r.cantidad)}</td>
-      <td><span class="badge-bodega">${r.bodega}</span></td>
-      <td style="text-align:right">${fmtCOP(r.costoUnit)}</td>
-      <td style="text-align:right;font-weight:600;color:var(--teal)">${fmtCOP(r.cantidad * r.costoUnit)}</td>
-      <td style="font-size:.77rem;color:var(--gray)">${r.fechaIngreso}</td>
-      <td style="font-size:.77rem;color:var(--gray)">${r.fechaUltSalida || "—"}</td>
-    </tr>`).join("");
-}
-
-function updateStats(rows) {
-  document.getElementById("statTotal").textContent   = rows.length;
-  document.getElementById("statOC").textContent      = new Set(rows.map(r => r.nroCompra)).size;
-  const total = rows.reduce((s,r) => s + (Number(r.cantidad) * Number(r.costoUnit)), 0);
-  document.getElementById("statValor").textContent   = fmtCOPShort(total);
-  document.getElementById("statBodegas").textContent = new Set(rows.map(r => r.bodega)).size;
-}
-
-// ── STATUS ─────────────────────────────────────────────
-function showStatus(msg, type) {
-  const el = document.getElementById("statusMsg");
-  el.textContent = msg; el.className = type; el.style.display = "block";
-  if (type === "ok") setTimeout(hideStatus, 5000);
-}
-function hideStatus() {
-  const el = document.getElementById("statusMsg");
-  el.style.display = "none"; el.className = "";
-}
-
-// ── FORMATO ────────────────────────────────────────────
-const fmtNum = n => Number(n).toLocaleString("es-CO");
-const fmtCOP = n => "$ " + Number(n).toLocaleString("es-CO", { minimumFractionDigits:0 });
-function fmtCOPShort(n) {
-  if (n >= 1e9) return "$ " + (n/1e9).toFixed(1) + "B";
-  if (n >= 1e6) return "$ " + (n/1e6).toFixed(1) + "M";
-  return "$ " + Number(n).toLocaleString("es-CO");
+  data.forEach(r=>{
+    tabla.innerHTML += `
+      <tr>
+        <td>${r.nroCompra}</td>
+        <td>${r.idProducto}</td>
+        <td>${r.nombre}</td>
+        <td>${r.cantidad}</td>
+        <td>${r.bodega}</td>
+        <td>${r.costoUnit}</td>
+      </tr>
+    `;
+  });
 }
 </script>
 

@@ -22,6 +22,7 @@
         #statusMsg { margin-top: 1.5rem; padding: 1rem; border-radius: 8px; display: none; text-align: center; font-weight: 600; }
         .loading { background: rgba(224,201,127,0.1); color: var(--gold); border: 1px solid var(--gold); }
         .success { background: rgba(45,212,191,0.1); color: var(--teal); border: 1px solid var(--teal); }
+        .error   { background: rgba(229,57,53,0.1);  color: #ef9a9a;    border: 1px solid #ef9a9a; }
     </style>
 </head>
 <body>
@@ -55,51 +56,52 @@
     </main>
 
     <script>
-        // --- 1. CONFIGURACIÓN: PEGA TU URL AQUÍ ---
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxusVBQq9FjAMKrzabtrmjx7uSvyLJXtG3ZiTf7lCUExOvtgs73AzxbxPP91ltTg3wI/exec";
+        // ── URL del Apps Script unificado ──────────────────────────
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRZB7tswXbF6Dj_ZCAsWLQ-sUmTqSBsgZpU1WM3lWQH3lleeSkXhpmLKChe_212P7J/exec";
 
         // Fecha automática
         document.getElementById('fechaIngreso').value = new Date().toISOString().split('T')[0];
 
-        // --- 2. LÓGICA DE ENVÍO ---
         document.getElementById('miFormulario').addEventListener('submit', function(e) {
-            e.preventDefault(); // Evita que la página se recargue o cambie
+            e.preventDefault();
 
             const msg = document.getElementById("statusMsg");
             const btn = document.getElementById("btnTexto");
-            
+
             msg.textContent = "⏳ Procesando en la nube...";
             msg.className = "loading";
             msg.style.display = "block";
             btn.disabled = true;
 
-            // Recoger datos manualmente
             const datos = {
-                idProducto: document.getElementById('idProducto').value,
-                nombre: document.getElementById('nombre').value,
-                cantidad: document.getElementById('cantidad').value,
-                bodega: document.getElementById('bodega').value,
-                costoUnit: document.getElementById('costoUnit').value,
-                fechaIngreso: document.getElementById('fechaIngreso').value
+                action:      'saveInventario',   // ← campo nuevo para el script unificado
+                idProducto:  document.getElementById('idProducto').value,
+                nombre:      document.getElementById('nombre').value,
+                cantidad:    document.getElementById('cantidad').value,
+                bodega:      document.getElementById('bodega').value,
+                costoUnit:   document.getElementById('costoUnit').value,
+                fechaIngreso:document.getElementById('fechaIngreso').value
             };
 
-            // Enviar vía FETCH (esto no cambia la página)
             fetch(SCRIPT_URL, {
                 method: 'POST',
-                mode: 'no-cors', // Crucial para evitar bloqueos de Google
+                mode: 'no-cors',
                 cache: 'no-cache',
                 body: JSON.stringify(datos)
             })
             .then(() => {
                 msg.textContent = "✔ ¡Registro guardado exitosamente!";
                 msg.className = "success";
+                msg.style.display = "block";
                 document.getElementById('miFormulario').reset();
                 document.getElementById('fechaIngreso').value = new Date().toISOString().split('T')[0];
                 btn.disabled = false;
                 setTimeout(() => { msg.style.display = "none"; }, 5000);
             })
-            .catch(error => {
-                msg.textContent = "❌ Error al conectar";
+            .catch(() => {
+                msg.textContent = "❌ Error al conectar con el servidor";
+                msg.className = "error";
+                msg.style.display = "block";
                 btn.disabled = false;
             });
         });

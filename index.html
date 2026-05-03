@@ -1,147 +1,229 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Krystal · Inventario Premium</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Krystal · Sistema de Inventario</title>
+    <link rel="icon" href="data:,">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Raleway:wght@300;400;600&family=Barlow+Condensed:wght@700&display=swap" rel="stylesheet"/>
+    <style>
+        :root {
+            --navy: #0f0f1e; --navy2: #1a1a2e; --gold: #e0c97f; 
+            --teal: #2dd4bf; --white: #f0eff6; --gray: #8888aa;
+        }
 
-<style>
-body{
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg,#0f0f1e,#1a1a2e);
-  color:white;
-  padding:20px;
-}
-.card{
-  background:#1a1a2e;
-  padding:20px;
-  border-radius:12px;
-  margin-bottom:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,.5);
-}
-input,select{
-  width:100%;
-  padding:10px;
-  margin:5px 0;
-  border-radius:6px;
-  border:1px solid #333;
-  background:#0f0f1e;
-  color:white;
-}
-button{
-  padding:10px 20px;
-  background:#e0c97f;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-  font-weight:bold;
-}
-table{
-  width:100%;
-  border-collapse:collapse;
-}
-th,td{
-  padding:10px;
-  border-bottom:1px solid #333;
-}
-th{
-  color:#e0c97f;
-}
-</style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background: var(--navy);
+            color: var(--white);
+            font-family: 'Raleway', sans-serif;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #16213e;
+            border-bottom: 1px solid var(--gold);
+            padding: 1rem 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .kr-logo-svg { width: 45px; height: auto; }
+        
+        .brand h1 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.4rem; font-weight: 700;
+            color: var(--white); text-transform: uppercase;
+            line-height: 1;
+        }
+
+        .brand p {
+            font-size: .65rem; color: var(--gold);
+            letter-spacing: .15em; text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        main { max-width: 1000px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        .card {
+            background: var(--navy2);
+            border: 1px solid rgba(224,201,127,.15);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,.5);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .field { display: flex; flex-direction: column; gap: .5rem; }
+        
+        label {
+            font-size: .75rem; font-weight: 600;
+            color: var(--gray); text-transform: uppercase;
+        }
+
+        input, select, textarea {
+            background: rgba(255,255,255,.05);
+            border: 1px solid rgba(224,201,127,.2);
+            border-radius: 7px; padding: .8rem;
+            color: var(--white); outline: none;
+            font-family: 'Raleway', sans-serif;
+        }
+
+        input:focus { border-color: var(--gold); }
+
+        .btn-primary {
+            background: var(--gold);
+            color: var(--navy);
+            padding: 1rem; border: none; border-radius: 7px;
+            font-weight: 700; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            width: 100%; margin-top: 1.5rem;
+        }
+
+        #statusMsg {
+            margin-top: 1.5rem; padding: 1rem;
+            border-radius: 7px; display: none; text-align: center;
+            font-weight: 600; font-size: 0.9rem;
+        }
+
+        .ok { background: rgba(45,212,191,0.1); color: var(--teal); border: 1px solid var(--teal); }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
+        th { text-align: left; color: var(--gold); padding: 1rem; border-bottom: 2px solid var(--gold); font-size: .75rem; }
+        td { padding: 1rem; border-bottom: 1px solid rgba(224,201,127,0.1); font-size: .85rem; }
+
+        iframe { display: none; }
+    </style>
 </head>
-
 <body>
 
-<h1>KRYSTAL · Inventario Premium</h1>
+    <header>
+        <svg class="kr-logo-svg" viewBox="0 0 60 70" fill="none">
+            <rect x="8" y="10" width="10" height="50" fill="white"/>
+            <rect x="22" y="25" width="10" height="35" fill="white"/>
+            <rect x="36" y="15" width="10" height="45" fill="white"/>
+            <rect x="8" y="8" width="38" height="5" fill="#FFE600"/>
+        </svg>
+        <div class="brand">
+            <h1>Krystal Soluciones</h1>
+            <p>Módulo de Inventario</p>
+        </div>
+    </header>
 
-<div class="card">
-<h3>Nuevo ingreso</h3>
+    <main>
+        <div class="card">
+            <!-- REEMPLAZA ESTA URL CON TU URL DE GOOGLE APPS SCRIPT -->
+            <form id="miFormulario" action="https://script.google.com/macros/s/AKfycbwRZB7tswXbF6Dj_ZCAsWLQ-sUmTqSBsgZpU1WM3lWQH3lleeSkXhpmLKChe_212P7J/exec" method="POST" target="miIframe" onsubmit="iniciarEnvio()">
+                <div class="form-grid">
+                    <div class="field">
+                        <label>ID Producto</label>
+                        <input type="text" name="idProducto" required placeholder="PRD-001">
+                    </div>
+                    <div class="field">
+                        <label>Nombre</label>
+                        <input type="text" name="nombre" required placeholder="Vidrio Templado">
+                    </div>
+                    <div class="field">
+                        <label>Cantidad</label>
+                        <input type="number" name="cantidad" value="1" min="1">
+                    </div>
+                    <div class="field">
+                        <label>Bodega</label>
+                        <select name="bodega">
+                            <option value="Krystal">Krystal</option>
+                            <option value="Carrera 30">Carrera 30</option>
+                            <option value="Teusaquillo">Teusaquillo</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Costo Unitario</label>
+                        <input type="number" name="costoUnit" value="0">
+                    </div>
+                    <div class="field">
+                        <label>Fecha Factura</label>
+                        <input type="date" name="fechaIngreso" id="inputFecha">
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Registrar en Google Sheets</button>
+            </form>
+            <div id="statusMsg"></div>
+        </div>
 
-<input id="idProducto" placeholder="ID Producto">
-<input id="nombre" placeholder="Nombre">
-<input id="descripcion" placeholder="Descripción">
-<input id="cantidad" type="number" placeholder="Cantidad">
-<input id="bodega" placeholder="Bodega">
-<input id="costoUnit" type="number" placeholder="Costo">
-<input id="fechaIngreso" type="date">
+        <div class="card" style="margin-top: 2rem;">
+            <button onclick="cargarTabla()" class="btn-primary" style="background:none; border:1px solid var(--gold); color:var(--gold); margin-bottom:1.5rem; width:auto; padding: 0.5rem 1.5rem;">↻ Actualizar Inventario</button>
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>OC</th>
+                            <th>ID</th>
+                            <th>Producto</th>
+                            <th>Cant.</th>
+                            <th>Bodega</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpoTabla"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
 
-<button onclick="guardar()">Guardar</button>
-<p id="msg"></p>
-</div>
+    <!-- EL IFRAME OCULTO QUE PROCESA EL ENVÍO -->
+    <iframe name="miIframe" id="miIframe" onload="if(procesando){ finalizarEnvio(); }"></iframe>
 
-<div class="card">
-<h3>Inventario</h3>
-<button onclick="cargar()">Actualizar</button>
+    <script>
+        const MI_URL = "https://script.google.com/macros/s/AKfycbwRZB7tswXbF6Dj_ZCAsWLQ-sUmTqSBsgZpU1WM3lWQH3lleeSkXhpmLKChe_212P7J/exec";
+        let procesando = false;
 
-<table>
-<thead>
-<tr>
-<th>OC</th>
-<th>ID</th>
-<th>Nombre</th>
-<th>Cantidad</th>
-<th>Bodega</th>
-<th>Costo</th>
-</tr>
-</thead>
-<tbody id="tabla"></tbody>
-</table>
-</div>
+        // Fecha de hoy por defecto
+        document.getElementById('inputFecha').value = new Date().toISOString().split('T')[0];
 
-<script>
-const GAS_URL = "https://script.google.com/macros/s/AKfycbxusVBQq9FjAMKrzabtrmjx7uSvyLJXtG3ZiTf7lCUExOvtgs73AzxbxPP91ltTg3wI/exec";
+        function iniciarEnvio() {
+            procesando = true;
+            const msg = document.getElementById("statusMsg");
+            msg.textContent = "⏳ Sincronizando con la nube...";
+            msg.className = "ok";
+            msg.style.display = "block";
+        }
 
-function val(id){ return document.getElementById(id).value; }
-function msg(t){ document.getElementById("msg").innerText=t; }
+        function finalizarEnvio() {
+            procesando = false;
+            const msg = document.getElementById("statusMsg");
+            msg.textContent = "✔ ¡Datos guardados exitosamente!";
+            document.getElementById('miFormulario').reset();
+            document.getElementById('inputFecha').value = new Date().toISOString().split('T')[0];
+            cargarTabla(); // Refresca la tabla automáticamente
+        }
 
-async function guardar(){
-  const data = {
-    idProducto: val("idProducto"),
-    nombre: val("nombre"),
-    descripcion: val("descripcion"),
-    cantidad: Number(val("cantidad")),
-    bodega: val("bodega"),
-    costoUnit: Number(val("costoUnit")),
-    fechaIngreso: val("fechaIngreso")
-  };
-
-  const res = await fetch(GAS_URL,{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify(data)
-  });
-
-  const json = await res.json();
-
-  if(json.ok){
-    msg("Guardado: "+json.nroCompra);
-    cargar();
-  }else{
-    msg("Error");
-  }
-}
-
-async function cargar(){
-  const res = await fetch(GAS_URL);
-  const data = await res.json();
-
-  const tabla = document.getElementById("tabla");
-  tabla.innerHTML="";
-
-  data.forEach(r=>{
-    tabla.innerHTML += `
-      <tr>
-        <td>${r.nroCompra}</td>
-        <td>${r.idProducto}</td>
-        <td>${r.nombre}</td>
-        <td>${r.cantidad}</td>
-        <td>${r.bodega}</td>
-        <td>${r.costoUnit}</td>
-      </tr>
-    `;
-  });
-}
-</script>
-
+        async function cargarTabla() {
+            const tb = document.getElementById('cuerpoTabla');
+            tb.innerHTML = "<tr><td colspan='5' style='text-align:center;'>Cargando...</td></tr>";
+            
+            try {
+                const response = await fetch(MI_URL);
+                const data = await response.json();
+                
+                tb.innerHTML = data.map(x => `
+                    <tr>
+                        <td>${x.nroCompra || '---'}</td>
+                        <td>${x.idProducto}</td>
+                        <td style="font-weight:600">${x.nombre}</td>
+                        <td style="color:var(--teal)">${x.cantidad}</td>
+                        <td>${x.bodega}</td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                tb.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--red);'>Error al conectar con el servidor.</td></tr>";
+            }
+        }
+    </script>
 </body>
 </html>

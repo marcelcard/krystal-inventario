@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Krystal · Sistema de Inventario</title>
+    <title>Krystal · Registro de Inventario</title>
     <link rel="icon" href="data:,">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Raleway:wght@300;400;600&family=Barlow+Condensed:wght@700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&family=Raleway:wght@400;600&display=swap" rel="stylesheet"/>
     <style>
         :root {
-            --navy: #0f0f1e; --navy2: #1a1a2e; --navy3: #16213e;
-            --gold: #e0c97f; --gold2: #c9a84c; --teal: #2dd4bf; 
-            --white: #f0eff6; --gray: #8888aa; --red: #f87171;
+            --navy: #0f0f1e; --navy2: #1a1a2e; 
+            --gold: #e0c97f; --teal: #2dd4bf; 
+            --white: #f0eff6; --gray: #8888aa;
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -19,72 +19,71 @@
             background: var(--navy);
             color: var(--white);
             font-family: 'Raleway', sans-serif;
+            display: flex;
+            flex-direction: column;
             min-height: 100vh;
-            background-image: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(224,201,127,.08) 0%, transparent 60%);
         }
 
         header {
-            background: linear-gradient(135deg, var(--navy2) 0%, #0d1b3e 100%);
-            border-bottom: 1px solid rgba(224,201,127,.25);
-            padding: 0 2rem;
+            background: #16213e;
+            border-bottom: 1px solid var(--gold);
+            padding: 1.5rem 2rem;
             display: flex;
             align-items: center;
-            height: 90px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            gap: 1.2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
 
-        .logo-wrap { display: flex; align-items: center; gap: 1rem; }
-        .kr-logo-svg { width: 45px; height: auto; }
-        .brand h1 { font-family: 'Barlow Condensed'; font-size: 1.4rem; text-transform: uppercase; line-height: 1; }
-        .brand p { font-size: .65rem; color: var(--gold); letter-spacing: .15em; text-transform: uppercase; }
+        .kr-logo-svg { width: 42px; height: auto; }
+        .brand h1 { font-family: 'Barlow Condensed'; font-size: 1.3rem; text-transform: uppercase; margin: 0; letter-spacing: 1px; }
+        .brand p { font-size: .6rem; color: var(--gold); text-transform: uppercase; margin: 0; }
 
-        main { max-width: 1000px; margin: 2rem auto; padding: 0 1.5rem; }
+        main { max-width: 800px; margin: 3rem auto; padding: 0 1.5rem; width: 100%; }
 
         .card {
             background: var(--navy2);
             border: 1px solid rgba(224,201,127,.15);
-            border-radius: 10px;
-            padding: 2rem;
-            box-shadow: 0 8px 32px rgba(0,0,0,.5);
-            margin-bottom: 2rem;
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,.6);
         }
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
         }
 
-        .field { display: flex; flex-direction: column; gap: .5rem; }
-        label { font-size: .75rem; font-weight: 600; color: var(--gray); text-transform: uppercase; }
+        .field { display: flex; flex-direction: column; gap: .6rem; }
+        label { font-size: .7rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.5px; }
 
         input, select {
             background: rgba(255,255,255,.05);
             border: 1px solid rgba(224,201,127,.2);
-            border-radius: 7px; padding: .8rem;
+            border-radius: 8px; padding: .85rem;
             color: var(--white); outline: none;
-            font-family: 'Raleway', sans-serif;
+            transition: border-color 0.3s;
         }
 
-        .btn-primary {
+        input:focus { border-color: var(--gold); }
+
+        .btn-submit {
             background: var(--gold);
             color: var(--navy);
-            padding: 1rem; border: none; border-radius: 7px;
+            padding: 1.1rem; border: none; border-radius: 8px;
             font-weight: 700; cursor: pointer;
-            text-transform: uppercase; width: 100%; margin-top: 1.5rem;
+            text-transform: uppercase; width: 100%; margin-top: 2rem;
+            font-size: 0.9rem; transition: transform 0.2s;
         }
+
+        .btn-submit:active { transform: scale(0.98); }
 
         #statusMsg {
             margin-top: 1.5rem; padding: 1rem;
-            border-radius: 7px; display: none; text-align: center; font-weight: 600;
+            border-radius: 8px; display: none; text-align: center; font-weight: 600;
         }
 
         .ok { background: rgba(45,212,191,0.1); color: var(--teal); border: 1px solid var(--teal); }
-        .err { background: rgba(248,113,113,0.1); color: var(--red); border: 1px solid var(--red); }
-
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; color: var(--gold); padding: 1rem; border-bottom: 2px solid var(--gold); font-size: .75rem; }
-        td { padding: 1rem; border-bottom: 1px solid rgba(224,201,127,0.1); font-size: .85rem; }
 
         iframe { display: none; }
     </style>
@@ -92,108 +91,90 @@
 <body>
 
     <header>
-        <div class="logo-wrap">
-            <svg class="kr-logo-svg" viewBox="0 0 60 70" fill="none">
-                <rect x="8" y="10" width="10" height="50" fill="white"/>
-                <rect x="22" y="25" width="10" height="35" fill="white"/>
-                <rect x="36" y="15" width="10" height="45" fill="white"/>
-                <rect x="8" y="8" width="38" height="5" fill="#FFE600"/>
-            </svg>
-            <div class="brand">
-                <h1>Krystal Soluciones</h1>
-                <p>Módulo de Inventario</p>
-            </div>
+        <svg class="kr-logo-svg" viewBox="0 0 60 70" fill="none">
+            <rect x="8" y="10" width="10" height="50" fill="white"/>
+            <rect x="22" y="25" width="10" height="35" fill="white"/>
+            <rect x="36" y="15" width="10" height="45" fill="white"/>
+            <rect x="8" y="8" width="38" height="5" fill="#FFE600"/>
+        </svg>
+        <div class="brand">
+            <h1>Krystal Soluciones</h1>
+            <p>Registro de Inventario</p>
         </div>
     </header>
 
     <main>
-        <!-- SECCIÓN DE REGISTRO -->
         <div class="card">
-            <form id="formInventario" action="https://script.google.com/macros/s/AKfycbwRZB7tswXbF6Dj_ZCAsWLQ-sUmTqSBsgZpU1WM3lWQH3lleeSkXhpmLKChe_212P7J/exec" method="POST" target="iframeRegistro" onsubmit="iniciarProceso()">
+            <!-- REEMPLAZA ESTA URL CON TU URL DE GOOGLE APPS SCRIPT -->
+            <form id="formInventario" action="https://script.google.com/macros/s/AKfycbwRZB7tswXbF6Dj_ZCAsWLQ-sUmTqSBsgZpU1WM3lWQH3lleeSkXhpmLKChe_212P7J/exec" method="POST" target="puenteInvisible" onsubmit="iniciarEnvio()">
                 <div class="form-grid">
-                    <div class="field"><label>ID Producto</label><input type="text" name="idProducto" required></div>
-                    <div class="field"><label>Nombre</label><input type="text" name="nombre" required></div>
-                    <div class="field"><label>Cantidad</label><input type="number" name="cantidad" value="1"></div>
-                    <div class="field"><label>Bodega</label>
+                    <div class="field">
+                        <label>ID Producto</label>
+                        <input type="text" name="idProducto" required placeholder="Ej: PRD-001">
+                    </div>
+                    <div class="field">
+                        <label>Descripción</label>
+                        <input type="text" name="nombre" required placeholder="Detalle del producto">
+                    </div>
+                    <div class="field">
+                        <label>Cantidad</label>
+                        <input type="number" name="cantidad" value="1" min="1">
+                    </div>
+                    <div class="field">
+                        <label>Bodega</label>
                         <select name="bodega">
                             <option value="Krystal">Krystal</option>
                             <option value="Carrera 30">Carrera 30</option>
                             <option value="Teusaquillo">Teusaquillo</option>
                         </select>
                     </div>
-                    <div class="field"><label>Costo Unitario</label><input type="number" name="costoUnit" value="0"></div>
-                    <div class="field"><label>Fecha Factura</label><input type="date" name="fechaIngreso" id="fechaHoy"></div>
+                    <div class="field">
+                        <label>Costo Unitario</label>
+                        <input type="number" name="costoUnit" value="0">
+                    </div>
+                    <div class="field">
+                        <label>Fecha Factura</label>
+                        <input type="date" name="fechaIngreso" id="fechaAuto">
+                    </div>
                 </div>
-                <button type="submit" class="btn-primary">Registrar en Nube</button>
+                <button type="submit" class="btn-submit">Sincronizar Registro</button>
             </form>
             <div id="statusMsg"></div>
         </div>
-
-        <!-- SECCIÓN DE TABLA -->
-        <div class="card">
-            <button onclick="cargarInventario()" class="btn-primary" style="background:none; border:1px solid var(--gold); color:var(--gold); margin-bottom:1.5rem; width:auto; padding: 0.5rem 1.5rem;">↻ Actualizar Inventario</button>
-            <div style="overflow-x:auto;">
-                <table>
-                    <thead>
-                        <tr><th>OC</th><th>ID</th><th>Producto</th><th>Cant.</th><th>Bodega</th></tr>
-                    </thead>
-                    <tbody id="cuerpoTabla"></tbody>
-                </table>
-            </div>
-        </div>
     </main>
 
-    <!-- EL PUENTE PARA EVITAR CORS EN POST -->
-    <iframe name="iframeRegistro" id="iframeRegistro" onload="if(estadoEnvio){ finalizarProceso(); }"></iframe>
+    <!-- IFRAME Puente: Crucial para evitar errores de CORS -->
+    <iframe name="puenteInvisible" id="puenteInvisible" onload="if(typeof estadoEnvio !== 'undefined' && estadoEnvio){ finalizarEnvio(); }"></iframe>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxusVBQq9FjAMKrzabtrmjx7uSvyLJXtG3ZiTf7lCUExOvtgs73AzxbxPP91ltTg3wI/exec";
+        // Variable de control global
         let estadoEnvio = false;
 
-        document.getElementById('fechaHoy').value = new Date().toISOString().split('T')[0];
+        // Establecer fecha de hoy automáticamente
+        document.getElementById('fechaAuto').value = new Date().toISOString().split('T')[0];
 
-        function iniciarProceso() {
-            estadoEnvio = true;
-            const m = document.getElementById("statusMsg");
-            m.textContent = "⏳ Sincronizando con Google Sheets...";
-            m.className = "ok";
-            m.style.display = "block";
+        function iniciarEnvio() {
+            estadoEnvio = true; // Activa la escucha del iframe
+            const msg = document.getElementById("statusMsg");
+            msg.textContent = "⏳ Enviando datos a Google Sheets...";
+            msg.className = "ok";
+            msg.style.display = "block";
         }
 
-        function finalizarProceso() {
-            estadoEnvio = false;
-            document.getElementById("statusMsg").textContent = "✔ Guardado exitosamente.";
-            document.getElementById('formInventario').reset();
-            document.getElementById('fechaHoy').value = new Date().toISOString().split('T')[0];
-            cargarInventario();
-        }
-
-        async function cargarInventario() {
-            const tb = document.getElementById('cuerpoTabla');
-            tb.innerHTML = "<tr><td colspan='5' style='text-align:center;'>Conectando...</td></tr>";
+        function finalizarEnvio() {
+            estadoEnvio = false; // Desactiva la escucha para evitar bucles
+            const msg = document.getElementById("statusMsg");
+            msg.textContent = "✔ ¡Registro guardado exitosamente!";
             
-            try {
-                // Petición fetch simple para evitar bloqueos CORS en GET
-                const res = await fetch(SCRIPT_URL);
-                if (!res.ok) throw new Error();
-                const data = await res.json();
-                
-                tb.innerHTML = data.map(x => `
-                    <tr>
-                        <td>${x.nroCompra || '---'}</td>
-                        <td>${x.idProducto}</td>
-                        <td style="font-weight:600">${x.nombre}</td>
-                        <td style="color:var(--teal)">${x.cantidad}</td>
-                        <td>${x.bodega}</td>
-                    </tr>
-                `).join('');
-            } catch (e) {
-                tb.innerHTML = "<tr><td colspan='5' style='text-align:center; color:var(--red);'>Error de conexión (CORS). Verifica la publicación del script.</td></tr>";
-            }
+            // Limpia el formulario
+            document.getElementById('formInventario').reset();
+            document.getElementById('fechaAuto').value = new Date().toISOString().split('T')[0];
+            
+            // Ocultar mensaje después de 4 segundos
+            setTimeout(() => {
+                msg.style.display = "none";
+            }, 4000);
         }
-        
-        // Carga inicial
-        window.onload = cargarInventario;
     </script>
 </body>
 </html>
